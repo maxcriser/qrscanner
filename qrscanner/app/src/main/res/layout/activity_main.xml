@@ -8,60 +8,10 @@
 
     <include layout="@layout/fragment_toolbar"/>
 
-    <android.support.v7.widget.CardView
-        style="@style/MainCard">
-
-        <LinearLayout
-            android:onClick="onScanClicked"
-            style="@style/MainCardLinear">
-
-            <ImageView
-                style="@style/CardLinearImage"
-                android:src="@drawable/ic_menu_white_24dp"/>
-
-            <TextView
-                style="@style/CardLinearText"
-                android:text="Scanning"/>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        style="@style/MainCard">
-
-        <LinearLayout
-            style="@style/MainCardLinear">
-
-            <ImageView
-                style="@style/CardLinearImage"
-                android:src="@drawable/ic_menu_white_24dp"/>
-
-            <TextView
-                style="@style/CardLinearText"
-                android:text="Settings"/>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        style="@style/MainCard">
-
-        <LinearLayout
-            style="@style/MainCardLinear">
-
-            <ImageView
-                style="@style/CardLinearImage"
-                android:src="@drawable/ic_menu_white_24dp"/>
-
-            <TextView
-                style="@style/CardLinearText"
-                android:text="Send"/>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground" />
 
 </LinearLayout>

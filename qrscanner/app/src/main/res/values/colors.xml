@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBackground">#485373</color>
-    <color name="colorToolbar">#323A51</color>
-    <color name="colorSelectToolbar">#202332</color>
-    <color name="colorButtonBlack">#171D2B</color>
+    <color name="colorMainItem">#323A51</color>
+    <color name="colorToolbar">#202332</color>
+    <color name="colorTopLine">#171D2B</color>
 </resources>
