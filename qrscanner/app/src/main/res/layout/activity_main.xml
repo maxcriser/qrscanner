@@ -1,111 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:orientation="vertical"
-    android:background="@color/colorBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
     <include layout="@layout/fragment_toolbar"/>
 
     <android.support.v7.widget.CardView
-        android:background="?attr/selectableItemBackground"
-        card_view:cardCornerRadius="2dp"
-        card_view:cardElevation="4dp"
-        card_view:cardBackgroundColor="@color/colorBackground"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="72dp">
+        style="@style/MainCard">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="16dp"
-            android:layout_height="match_parent">
+            android:onClick="onScanClicked"
+            style="@style/MainCardLinear">
 
             <ImageView
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_menu_white_24dp"
-                android:layout_gravity="center"
-                android:layout_width="36dp"
-                android:layout_height="36dp"/>
+                style="@style/CardLinearImage"
+                android:src="@drawable/ic_menu_white_24dp"/>
 
             <TextView
-                android:gravity="center|start"
-                android:text="Scanning"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                style="@style/CardLinearText"
+                android:text="Scanning"/>
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        card_view:cardCornerRadius="2dp"
-        card_view:cardElevation="4dp"
-        card_view:cardBackgroundColor="@color/colorBackground"
-        android:layout_margin="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="72dp">
+        style="@style/MainCard">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="16dp"
-            android:layout_height="match_parent">
+            style="@style/MainCardLinear">
 
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_menu_white_24dp"
-                android:layout_gravity="center"
-                android:layout_width="36dp"
-                android:layout_height="36dp"/>
+            <ImageView
+                style="@style/CardLinearImage"
+                android:src="@drawable/ic_menu_white_24dp"/>
 
             <TextView
-                android:gravity="center|start"
-                android:text="Settings"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                style="@style/CardLinearText"
+                android:text="Settings"/>
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        card_view:cardCornerRadius="2dp"
-        card_view:cardElevation="4dp"
-        card_view:cardBackgroundColor="@color/colorBackground"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="72dp">
+        style="@style/MainCard">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="16dp"
-            android:layout_height="match_parent">
+            style="@style/MainCardLinear">
 
             <ImageView
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_menu_white_24dp"
-                android:layout_gravity="center"
-                android:layout_width="36dp"
-                android:layout_height="36dp"/>
+                style="@style/CardLinearImage"
+                android:src="@drawable/ic_menu_white_24dp"/>
 
             <TextView
-                android:gravity="center|start"
-                android:text="Send"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                style="@style/CardLinearText"
+                android:text="Send"/>
 
         </LinearLayout>
 

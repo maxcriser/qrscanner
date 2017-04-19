@@ -7,12 +7,12 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    public void onScanClicked(final View view) {
-        startActivity(new Intent(this, ScannerActivity.class));
+    public void onScanClicked(View view) {
+        this.startActivity(new Intent(this, ScannerActivity.class));
     }
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
