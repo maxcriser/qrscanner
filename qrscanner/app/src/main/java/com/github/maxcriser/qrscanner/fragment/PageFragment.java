@@ -14,23 +14,23 @@ public class PageFragment extends Fragment {
 
     private int mPage;
 
-    public static PageFragment newInstance(int page) {
-        Bundle args = new Bundle();
+    public static PageFragment newInstance(final int page) {
+        final Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        PageFragment fragment = new PageFragment();
+        final PageFragment fragment = new PageFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPage = getArguments().getInt(ARG_PAGE);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                             final Bundle savedInstanceState) {
 
         switch (getArguments().getInt(ARG_PAGE))
         {
