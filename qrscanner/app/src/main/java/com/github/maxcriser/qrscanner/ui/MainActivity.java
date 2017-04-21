@@ -1,44 +1,33 @@
 package com.github.maxcriser.qrscanner.ui;
 
 import android.Manifest;
-import android.content.ContentValues;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.github.maxcriser.qrscanner.Core;
 import com.github.maxcriser.qrscanner.R;
 import com.github.maxcriser.qrscanner.adapter.ItemAdapter;
 import com.github.maxcriser.qrscanner.adapter.SampleFragmentPagerAdapter;
-import com.github.maxcriser.qrscanner.async.OnResultCallback;
-import com.github.maxcriser.qrscanner.database.DatabaseHelper;
-import com.github.maxcriser.qrscanner.database.models.ItemModel;
-import com.github.maxcriser.qrscanner.loader.ItemLoader;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private static final int PERMISSION_REQUEST_CAMERA = 0;
-    private RecyclerView recyclerItems;
-    private static final int LOADER_ID = 1;
-    private ItemAdapter adapter;
 
     @Override
     public final void handleResult(final Result pResult) {
@@ -56,22 +45,30 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-//        return new ItemLoader(this, "", ItemModel.class, getApplication());
-        return null;
-    }
+    public void onSettingsClicked(View view) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Login");
+        // this is set the view from XML inside AlertDialog
+        alert.setView(R.layout.fragment_settings);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
-    @Override
-    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-//        adapter = new ItemAdapter(data, this, R.layout.item_database);
-//    //    recyclerItems.setAdapter(adapter);
-//        recyclerItems.swapAdapter(adapter, true);
-    }
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-    @Override
-    public void onLoaderReset(final Loader<Cursor> loader) {
-//        recyclerItems.swapAdapter(null, true);
+        alert.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getBaseContext(), "OK", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
     }
 
     private void startScanner() {
@@ -90,59 +87,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-//
-//        viewPager.findViewById(R.id.linear_database);
-//
-//        recyclerItems = (RecyclerView) viewPager.findViewById(R.id.recycler_view);
-//
-//        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
-//
-//        recyclerItems.setHasFixedSize(true);
-//        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        layoutManager.setReverseLayout(true);
-//        layoutManager.setStackFromEnd(true);
-//        recyclerItems.setLayoutManager(layoutManager);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        final LoaderManager supportLoaderManager = getSupportLoaderManager();
-//        if (supportLoaderManager.getLoader(LOADER_ID) != null) {
-//            supportLoaderManager.getLoader(LOADER_ID).forceLoad();
-//        }
     }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        DatabaseHelper dbHelper;
-//        dbHelper = ((Core) getApplication()).getDatabaseHelper(this);
-//
-//        final ContentValues newItem = new ContentValues();
-//        newItem.put(ItemModel.ID, (Integer) null);
-//        newItem.put(ItemModel.TEXT, "TEST");
-//        newItem.put(ItemModel.CODE_FORMAT, "CODE TEST");
-//
-//        dbHelper.insert(ItemModel.class, newItem, new OnResultCallback<Long, Void>() {
-//
-//            @Override
-//            public void onSuccess(final Long pLong) {
-//                Toast.makeText(MainActivity.this, "ADDED", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onError(final Exception pE) {
-//                Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onProgressChanged(final Void pVoid) {
-//
-//            }
-//        });
-
         initViews();
     }
 
