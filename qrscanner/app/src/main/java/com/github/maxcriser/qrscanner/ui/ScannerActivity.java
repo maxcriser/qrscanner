@@ -32,6 +32,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                                mZXingScannerView.resumeCameraPreview(ScannerActivity.this);
                             }
                         })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -39,6 +40,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         addItem(result, pResult.getBarcodeFormat().toString());
+                        mZXingScannerView.resumeCameraPreview(ScannerActivity.this);
                     }
                 });
         AlertDialog alert = builder.create();
