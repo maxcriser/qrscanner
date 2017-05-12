@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Walker</string>
-    <string name="need_access_to_the_camera">Application need access to the camera</string>
+    <string name="need_access_to_the_camera">Доступ к камере необходим для функционала приложения</string>
+    <string name="detected">Сканирование</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">Принять</string>
+    <string name="settings">Настройки</string>
+    <string name="save">Сохранить</string>
+    <string name="server">Сервер</string>
+    <string name="password">Пароль</string>
+    <string name="username">Имя пользователя</string>
+    <string name="use_alternative_username_and_password">Альтернативный логин и пароль</string>
+    <string name="use_alternative_server">Альтернативный сервер</string>
+    <string name="sound_at_recognition">Звук при сканировании</string>
 </resources>

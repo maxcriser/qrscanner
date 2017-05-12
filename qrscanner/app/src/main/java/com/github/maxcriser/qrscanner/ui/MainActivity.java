@@ -1,7 +1,6 @@
 package com.github.maxcriser.qrscanner.ui;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,13 +12,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.AppCompatImageView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.github.maxcriser.qrscanner.R;
-import com.github.maxcriser.qrscanner.adapter.ItemAdapter;
 import com.github.maxcriser.qrscanner.adapter.SampleFragmentPagerAdapter;
 import com.google.zxing.Result;
 
@@ -45,30 +45,72 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
     }
 
-    public void onSettingsClicked(View view) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Login");
-        // this is set the view from XML inside AlertDialog
-        alert.setView(R.layout.fragment_settings);
-        // disallow cancel of AlertDialog on click of back button and outside touch
-        alert.setCancelable(false);
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+    public void onSettingsClicked(final View view) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.fragment_settings, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setTitle(R.string.settings);
+        dialogBuilder.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+            public void onClick(final DialogInterface dialog, final int which) {
+
             }
         });
 
-        alert.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getBaseContext(), "OK", Toast.LENGTH_SHORT).show();
+            public void onClick(final DialogInterface dialog, final int which) {
+
             }
         });
-        AlertDialog dialog = alert.create();
-        dialog.show();
+
+        final EditText password = (EditText) dialogView.findViewById(R.id.password);
+        final AppCompatImageView eyePassword = (AppCompatImageView) dialogView.findViewById(R.id.eye_password);
+
+        eyePassword.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                if (password.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+                    eyePassword.setImageResource(R.drawable.eye_off);
+                    password.setInputType(InputType.TYPE_CLASS_TEXT);
+                } else {
+                    eyePassword.setImageResource(R.drawable.eye_on);
+                    password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+            }
+        });
+
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+//
+//        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//        alert.setTitle("Login");
+//        // this is set the view from XML inside AlertDialog
+//        alert.setView(R.layout.fragment_settings);
+//        // disallow cancel of AlertDialog on click of back button and outside touch
+//        alert.setCancelable(false);
+//        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(final DialogInterface dialog, final int which) {
+//                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        alert.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(final DialogInterface dialog, final int which) {
+//                Toast.makeText(getBaseContext(), "OK", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        final AlertDialog dialog = alert.create();
+//        dialog.show();
     }
 
     private void startScanner() {

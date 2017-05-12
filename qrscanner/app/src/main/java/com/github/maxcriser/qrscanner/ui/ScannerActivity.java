@@ -3,13 +3,12 @@ package com.github.maxcriser.qrscanner.ui;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.github.maxcriser.qrscanner.Core;
 import com.github.maxcriser.qrscanner.R;
-import com.github.maxcriser.qrscanner.async.OnResultCallback;
 import com.github.maxcriser.qrscanner.database.DatabaseHelper;
 import com.github.maxcriser.qrscanner.database.models.ItemModel;
 import com.google.zxing.Result;
@@ -23,53 +22,43 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     @Override
     public void handleResult(final Result pResult) {
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.scan_sound);
+        mp.start();
+
         final String result = pResult.getText();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Detected")
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.detected)
                 .setMessage(result)
                 .setCancelable(false)
-                .setNegativeButton("Cancel",
+                .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+
+                            public void onClick(final DialogInterface dialog, final int id) {
                                 dialog.cancel();
                                 mZXingScannerView.resumeCameraPreview(ScannerActivity.this);
                             }
                         })
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        // TODO: 13.05.2017 Try load to server, if sending are not applied then save to database // addItem(...);
                         addItem(result, pResult.getBarcodeFormat().toString());
                         mZXingScannerView.resumeCameraPreview(ScannerActivity.this);
                     }
                 });
-        AlertDialog alert = builder.create();
+
+        final AlertDialog alert = builder.create();
         alert.show();
     }
 
-    private void addItem(String result, String resultCode) {
+    private void addItem(final String result, final String resultCode) {
         final ContentValues newItem = new ContentValues();
         newItem.put(ItemModel.ID, (Integer) null);
         newItem.put(ItemModel.TEXT, result);
         newItem.put(ItemModel.CODE_FORMAT, resultCode);
 
-        dbHelper.insert(ItemModel.class, newItem, new OnResultCallback<Long, Void>() {
-
-            @Override
-            public void onSuccess(final Long pLong) {
-                Toast.makeText(ScannerActivity.this, "ADDED", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(final Exception pE) {
-                Toast.makeText(ScannerActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onProgressChanged(final Void pVoid) {
-
-            }
-        });
+        dbHelper.insert(ItemModel.class, newItem, null);
     }
 
     @Override
