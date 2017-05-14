@@ -13,4 +13,7 @@
     <string name="use_alternative_server">Альтернативный сервер</string>
     <string name="sound_at_recognition">Звук при сканировании</string>
     <string name="please_fill_all_fields">Необходимо заполнить все поля</string>
+    <string name="server_example_com">server.example.com</string>
+    <string name="username_eng">username</string>
+    <string name="password_eng">password</string>
 </resources>

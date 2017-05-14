@@ -75,9 +75,6 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
         mZXingScannerView.startCamera();
         mZXingScannerView.setResultHandler(this);
         dbHelper = ((Core) getApplication()).getDatabaseHelper(this);
-
-        mSharedPreferences = getPreferences(MODE_PRIVATE);
-        isSound = mSharedPreferences.getBoolean(Constants.Shared.SOUND, true);
     }
 
     @Override
@@ -94,5 +91,8 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
         if (mZXingScannerView != null) {
             mZXingScannerView.startCamera();
         }
+
+        mSharedPreferences = getSharedPreferences(Constants.Shared.SHARED_NAME, MODE_PRIVATE);
+        isSound = mSharedPreferences.getBoolean(Constants.Shared.SOUND, true);
     }
 }

@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         final LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_settings, null);
         dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
 
         final EditText server = (EditText) dialogView.findViewById(R.id.server);
         final CheckBox useAltServer = (CheckBox) dialogView.findViewById(R.id.use_alt_server);
@@ -70,12 +71,20 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         final AppCompatImageView eyePassword = (AppCompatImageView) dialogView.findViewById(R.id.eye_password);
         final CheckBox useSound = (CheckBox) dialogView.findViewById(R.id.use_sound);
 
-        mSharedPreferences = getPreferences(MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(Constants.Shared.SHARED_NAME, MODE_PRIVATE);
         server.setText(mSharedPreferences.getString(Constants.Shared.SERVER, Constants.AlternativeData.SERVER));
-        useAltServer.setChecked(mSharedPreferences.getBoolean(Constants.Shared.USE_ALT_SERVER, true));
+
+        final Boolean serverBoolean = mSharedPreferences.getBoolean(Constants.Shared.USE_ALT_SERVER, true);
+        useAltServer.setChecked(serverBoolean);
+        server.setEnabled(!serverBoolean);
+
+        final Boolean usernameAndPasswordBoolean = mSharedPreferences.getBoolean(Constants.Shared.USE_ALT_PASS_AND_USERNMAE, true);
+        useAltUsernameAndPassword.setChecked(usernameAndPasswordBoolean);
+        username.setEnabled(!usernameAndPasswordBoolean);
+        password.setEnabled(!usernameAndPasswordBoolean);
+
         username.setText(mSharedPreferences.getString(Constants.Shared.USERNAME, Constants.AlternativeData.USERNAME));
         password.setText(mSharedPreferences.getString(Constants.Shared.PASSWORD, Constants.AlternativeData.PASSWORD));
-        useAltUsernameAndPassword.setChecked(mSharedPreferences.getBoolean(Constants.Shared.USE_ALT_PASS_AND_USERNMAE, true));
         useSound.setChecked(mSharedPreferences.getBoolean(Constants.Shared.SOUND, true));
 
         useAltServer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -124,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 if (serverStr.isEmpty() || usernameStr.isEmpty() || passwordStr.isEmpty()) {
                     Toast(getString(R.string.please_fill_all_fields));
                 } else {
-                    mSharedPreferences = getPreferences(MODE_PRIVATE);
+                    mSharedPreferences = getSharedPreferences(Constants.Shared.SHARED_NAME, MODE_PRIVATE);
                     final SharedPreferences.Editor editor = mSharedPreferences.edit();
 
                     editor.putBoolean(Constants.Shared.SOUND, useSoundBoolean);
@@ -135,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     editor.putString(Constants.Shared.PASSWORD, passwordStr);
 
                     editor.apply();
+                    dialog.dismiss();
                 }
             }
         });
@@ -143,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
             @Override
             public void onClick(final DialogInterface dialog, final int which) {
-
+                dialog.dismiss();
             }
         });
 

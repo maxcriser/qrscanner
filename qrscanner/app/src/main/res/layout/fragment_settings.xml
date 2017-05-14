@@ -20,13 +20,14 @@
             android:textSize="15sp"/>
 
         <EditText
-            android:maxLines="1"
             android:id="@+id/server"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="-3dp"
             android:layout_marginTop="-9dp"
-            android:hint=""/>
+            android:hint="@string/server_example_com"
+            android:maxLines="1"
+            android:singleLine="true"/>
 
         <CheckBox
             android:id="@+id/use_alt_server"
@@ -49,7 +50,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="-3dp"
             android:layout_marginTop="-9dp"
-            android:hint=""/>
+            android:hint="@string/username_eng"
+            android:maxLines="1"
+            android:singleLine="true"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,8 +71,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint=""
-                android:inputType="textPassword"/>
+                android:hint="@string/password_eng"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"/>
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/eye_password"
