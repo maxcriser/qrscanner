@@ -3,6 +3,7 @@ package com.github.maxcriser.qrscanner.ui;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,21 +14,27 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.github.maxcriser.qrscanner.R;
 import com.github.maxcriser.qrscanner.adapter.SampleFragmentPagerAdapter;
+import com.github.maxcriser.qrscanner.constants.Constants;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
+
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private static final int PERMISSION_REQUEST_CAMERA = 0;
+    SharedPreferences mSharedPreferences;
 
     @Override
     public final void handleResult(final Result pResult) {
@@ -45,17 +52,90 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
     }
 
+    public void Toast(final CharSequence text) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
     public void onSettingsClicked(final View view) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_settings, null);
         dialogBuilder.setView(dialogView);
+
+        final EditText server = (EditText) dialogView.findViewById(R.id.server);
+        final CheckBox useAltServer = (CheckBox) dialogView.findViewById(R.id.use_alt_server);
+        final EditText username = (EditText) dialogView.findViewById(R.id.username);
+        final EditText password = (EditText) dialogView.findViewById(R.id.password);
+        final CheckBox useAltUsernameAndPassword = (CheckBox) dialogView.findViewById(R.id.use_alt_username_and_password);
+        final AppCompatImageView eyePassword = (AppCompatImageView) dialogView.findViewById(R.id.eye_password);
+        final CheckBox useSound = (CheckBox) dialogView.findViewById(R.id.use_sound);
+
+        mSharedPreferences = getPreferences(MODE_PRIVATE);
+        server.setText(mSharedPreferences.getString(Constants.Shared.SERVER, Constants.AlternativeData.SERVER));
+        useAltServer.setChecked(mSharedPreferences.getBoolean(Constants.Shared.USE_ALT_SERVER, true));
+        username.setText(mSharedPreferences.getString(Constants.Shared.USERNAME, Constants.AlternativeData.USERNAME));
+        password.setText(mSharedPreferences.getString(Constants.Shared.PASSWORD, Constants.AlternativeData.PASSWORD));
+        useAltUsernameAndPassword.setChecked(mSharedPreferences.getBoolean(Constants.Shared.USE_ALT_PASS_AND_USERNMAE, true));
+        useSound.setChecked(mSharedPreferences.getBoolean(Constants.Shared.SOUND, true));
+
+        useAltServer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+                server.setEnabled(!isChecked);
+
+                if (isChecked) {
+                    server.setText(Constants.AlternativeData.SERVER);
+                } else {
+                    server.setText(null);
+                }
+            }
+        });
+
+        useAltUsernameAndPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+                username.setEnabled(!isChecked);
+                password.setEnabled(!isChecked);
+
+                if (isChecked) {
+                    username.setText(Constants.AlternativeData.USERNAME);
+                    password.setText(Constants.AlternativeData.PASSWORD);
+                } else {
+                    username.setText(null);
+                    password.setText(null);
+                }
+            }
+        });
+
         dialogBuilder.setTitle(R.string.settings);
         dialogBuilder.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(final DialogInterface dialog, final int which) {
+                final String serverStr = server.getText().toString();
+                final String usernameStr = username.getText().toString();
+                final String passwordStr = password.getText().toString();
+                final Boolean useSoundBoolean = useSound.isChecked();
+                final Boolean useAltServerBoolean = useAltServer.isChecked();
+                final Boolean useAltPasswordAndUsernameBoolean = useAltUsernameAndPassword.isChecked();
 
+                if (serverStr.isEmpty() || usernameStr.isEmpty() || passwordStr.isEmpty()) {
+                    Toast(getString(R.string.please_fill_all_fields));
+                } else {
+                    mSharedPreferences = getPreferences(MODE_PRIVATE);
+                    final SharedPreferences.Editor editor = mSharedPreferences.edit();
+
+                    editor.putBoolean(Constants.Shared.SOUND, useSoundBoolean);
+                    editor.putBoolean(Constants.Shared.USE_ALT_SERVER, useAltServerBoolean);
+                    editor.putBoolean(Constants.Shared.USE_ALT_PASS_AND_USERNMAE, useAltPasswordAndUsernameBoolean);
+                    editor.putString(Constants.Shared.SERVER, serverStr);
+                    editor.putString(Constants.Shared.USERNAME, usernameStr);
+                    editor.putString(Constants.Shared.PASSWORD, passwordStr);
+
+                    editor.apply();
+                }
             }
         });
 
@@ -67,50 +147,22 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        final EditText password = (EditText) dialogView.findViewById(R.id.password);
-        final AppCompatImageView eyePassword = (AppCompatImageView) dialogView.findViewById(R.id.eye_password);
-
         eyePassword.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(final View v) {
-                if (password.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+                if (password.getInputType() != TYPE_TEXT_VARIATION_PASSWORD) {
+                    password.setInputType(TYPE_TEXT_VARIATION_PASSWORD);
                     eyePassword.setImageResource(R.drawable.eye_off);
-                    password.setInputType(InputType.TYPE_CLASS_TEXT);
                 } else {
+                    password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
                     eyePassword.setImageResource(R.drawable.eye_on);
-                    password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
             }
         });
 
         final AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
-
-//
-//        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//        alert.setTitle("Login");
-//        // this is set the view from XML inside AlertDialog
-//        alert.setView(R.layout.fragment_settings);
-//        // disallow cancel of AlertDialog on click of back button and outside touch
-//        alert.setCancelable(false);
-//        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(final DialogInterface dialog, final int which) {
-//                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        alert.setPositiveButton("Login", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(final DialogInterface dialog, final int which) {
-//                Toast.makeText(getBaseContext(), "OK", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        final AlertDialog dialog = alert.create();
-//        dialog.show();
     }
 
     private void startScanner() {

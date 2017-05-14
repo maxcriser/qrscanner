@@ -3,12 +3,14 @@ package com.github.maxcriser.qrscanner.ui;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.maxcriser.qrscanner.Core;
 import com.github.maxcriser.qrscanner.R;
+import com.github.maxcriser.qrscanner.constants.Constants;
 import com.github.maxcriser.qrscanner.database.DatabaseHelper;
 import com.github.maxcriser.qrscanner.database.models.ItemModel;
 import com.google.zxing.Result;
@@ -19,11 +21,15 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     private ZXingScannerView mZXingScannerView;
     private DatabaseHelper dbHelper;
+    private Boolean isSound;
+    SharedPreferences mSharedPreferences;
 
     @Override
     public void handleResult(final Result pResult) {
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.scan_sound);
-        mp.start();
+        if (isSound) {
+            final MediaPlayer mp = MediaPlayer.create(this, R.raw.scan_sound);
+            mp.start();
+        }
 
         final String result = pResult.getText();
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -69,6 +75,9 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
         mZXingScannerView.startCamera();
         mZXingScannerView.setResultHandler(this);
         dbHelper = ((Core) getApplication()).getDatabaseHelper(this);
+
+        mSharedPreferences = getPreferences(MODE_PRIVATE);
+        isSound = mSharedPreferences.getBoolean(Constants.Shared.SOUND, true);
     }
 
     @Override

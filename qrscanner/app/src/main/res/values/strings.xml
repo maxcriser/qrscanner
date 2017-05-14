@@ -12,4 +12,5 @@
     <string name="use_alternative_username_and_password">Альтернативный логин и пароль</string>
     <string name="use_alternative_server">Альтернативный сервер</string>
     <string name="sound_at_recognition">Звук при сканировании</string>
+    <string name="please_fill_all_fields">Необходимо заполнить все поля</string>
 </resources>
